@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="app.js"></script>
+</head>
+
+<body>
+  <div class="container" ng-app="App" ng-controller="mainController">
+    <div class="row">
+
+      <div class="col-md-9 align_right bike-list">
+        <div class="bike-row row" ng-repeat="x in bikes.items track by $index">
+          <div class="col-xs-4 col-sm-3 col-md-3 bike-thumbnail">
+            <img src="https://bikecdn.gaadi.com/gaadidata/model_images/large/Honda_Activa_3G_92.jpg">
+          </div>
+          <div class="col-xs-5 col-sm-6 col-md-6 bike-details">
+            <h3>{{x.bike_name}}</h3>
+            <h5>Deposit Amount : <span class="rate">&#8377; {{x.deposit}}</span> per bike</h5>
+            <h5>Duration : <b>{{showdays}}</b> Days : <b>{{showhours}}</b> Hour </h5>
+            <div>
+              <div class="col-sm-5" style="margin-left:-15px;">
+                Pick-up Point :</div>
+              <div class="col-sm-7" style="margin-left:-45px;">
+                <select class="form-control input-sm" ng-model="x.location[0]" ng-options="PickUpPoint as PickUpPoint for PickUpPoint in x.location" ng-selected="x.location[0]==PickUpPoint">
+                </select>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="col-xs-3 col-sm-3 col-md-3 bike-price">
+            <h3>Rate: &#8377; {{x.rate}}/hr </h3>
+            <h5>Total Available : {{x.available}}</h5>
+            <button type="button" ng-hide="x.hide_unhide_AddButton" class="btn btn-success" ng-click="addvalue(x.bike_name,x.rate,x.available,x.location[0]);hideAddButton(x)">Add to Cart</button>
+            <a class="btn" ng-show="x.hide_unhide_AddButton" ng-click="showAddButton(x);callCartDelete(x.bike_name)" style="color:red"><b>Remove</b></a>
+          </div>
+        </div>
+
+
+      </div>
+
+
+      <div class="col-md-3 sidebar">
+
+        <div class="sidebar-inner">
+          <div class="cart-heading">Cart</div>
+          <div style="max-height:280px; overflow-y:scroll;">
+            <div class="cart-item" ng-repeat="value in storeArray track by $index">
+              <span>
+                                        <button type="button"  ng-click="callCartDelete(value.bike);callFunction(value.bike)" class="btn btn-danger remove" >X</button>
+                                        <h4>{{value.bike}}
+                                        <small>Left :{{value.available-1}}
+                                        </small></h4>
+                                        {{value.rate_per_bike}} x {{value.bike_counter}} =  Rs.{{value.cost}}/hr 
+                                       
+                                    </span>
+              <span class="loacation-marker-png">
+                                        <div><img src="http://richmackey.com.s146108.gridserver.com/wp-content/uploads/2011/01/google-marker-preview1.png">{{value.PickUpLocation}}</div>
+                                        
+                                    </span>
+              <div class="add-more">
+                <button type="button" ng-click="IncrementUpdateElement(value.bike)" class="btn btn-success plus-minus">+</button>
+                <b>&nbsp;{{value.bike_counter}}</b>&nbsp;
+                <button type="button" ng-click="DecrementUpdateElement(value.bike)" class="btn btn-success plus-minus">-</button>
+                <div style="float:right;">&#8377; {{value.cost * Total_hours}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="cart-total">
+            <p><b>Total Cost</b> ={{Total_hours}}hr x {{TotalCost}} = &#8377;{{Total_hours * TotalCost}}</p>
+
+          </div> 
+          <div class="cart-book-btn">
+            <button ng-click="redirectToPayment()" class="btn btn-block booknow-btn"><b>Book Now</b></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>
